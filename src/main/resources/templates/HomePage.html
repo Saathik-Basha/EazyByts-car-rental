@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>CRA</title>
+
+    <style th:inline="text">
+        body{
+            background-image: url("[[@{/}]]bg-img.png");
+            background-size: cover;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="position-absolute top-0 end-0 m-5" th:if="${isAuthenticated == false}">
+    <a class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#loginModal">
+        <span class="fw-bold">Login </span><img th:src="@{/login-color.png}" style="height:30px;width:30px;">
+    </a>
+</div>
+<div class="position-absolute top-0 end-0 m-5" th:if="${isAuthenticated == true}">
+    <button class="btn dropdown-toggle fw-bold text-dark" id="bd-versions" data-bs-toggle="dropdown" aria-expanded="false"
+            data-bs-display="static">
+        <span>Welcome </span><span class="d-none d-lg-inline" th:text="${userName}"></span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+        <li><a class="dropdown-item" href="/my-booking">My Booking</a></li>
+        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+    </ul>
+<!--    <p class="fw-bold text-dark">Welcome <span th:text="${userName}"></span></p>-->
+</div>
+<div class="position-absolute top-50 start-50 translate-middle">
+    <form action="/search" method="post">
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <select class="form-select" aria-label="Default select example" name="location" id="location">
+                <option></option>
+                <option value="Kochi" >Kochi</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Calicut">Calicut</option>
+                <option value="Palakkad">Palakkad</option>
+            </select>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="endDate" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn text-white" style="width:500px;background-color:#87c700">Find Cars</button>
+    </form>
+</div>
+<div class="position-absolute bottom-0 start-0 m-5">
+    <a class="btn btn-outline-secondary" href="join-as-partner">
+        <span class="fw-bold">Partner with Us </span>
+    </a>
+</div>
+
+<div class="row  fixed-bottom m-0 mt-5 bg-dark text-light">
+    <div class="col m-2 text-center">
+        All Right Recieved @ CRA
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container p-4">
+                    <h5 class="fw-bold">Welcome</h5>
+                    <p style="color:#87c700">Sign into your account</p>
+                    <img class="position-absolute top-0 end-0 mt-3" th:src="@{/user-logo.jpg}"
+                         style="height:90px;width:90px;">
+                    <div class="mt-4">
+                        <form action="/login" method="post">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="userEmail" class="form-label">Email</label>
+                                        <input type="text" class="form-control rounded-pill p-2" id="userEmail"
+                                               name="userEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="userPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control rounded-pill p-2" id="userPassword"
+                                               name="userPassword" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn rounded-pill p-2 text-white"
+                                        style="width:430px;background-color:#87c700">Sign In
+                                </button>
+                                <a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#createModal"
+                                   style="color:#87c700">New User</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container p-4">
+                    <h5 class="fw-bold">Welcome</h5>
+                    <p style="color:#87c700">Register your account</p>
+                    <img class="position-absolute top-0 end-0 mt-3" th:src="@{/user-logo.jpg}"
+                         style="height:90px;width:90px;">
+                    <div class="mt-4">
+                        <form action="/register" method="post">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control rounded-pill" id="name" name="name"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control rounded-pill" id="email" name="email"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control rounded-pill" id="phoneNumber"
+                                               name="phoneNumber" required  pattern="[0-9]{10}"
+                                               title="Please use 10 digit mobile number.">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="place" class="form-label">Location</label>
+                                        <input type="text" class="form-control rounded-pill" id="place" name="place"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control rounded-pill" id="password"
+                                               name="password" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address</label>
+                                        <textarea class="form-control rounded-pill" id="address" name="address"
+                                                  required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn rounded-pill p-2 text-white" id="registerButton"
+                                        style="width:430px;background-color:#87c700">Register
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
